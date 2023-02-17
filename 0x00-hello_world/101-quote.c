@@ -1,13 +1,13 @@
 #include <stdio.h>
-#include <errno.h>
+#include <unistd.h>
 
 /**
- * main - c program to print using perror
- *
- * Return: 1
-*/
+ * main - A c program that prints a line to the standard error
+ * Return: 1 (Success)
+ */
 int main(void)
 {
-	perror("and that piece of art is useful\" - Dora Korpar, 2015-10-19\n");
+	write(2,
+		"and that piece of art is useful\" - Dora Korpar, 2015-10-19\n", 59);
 	return (1);
 }
