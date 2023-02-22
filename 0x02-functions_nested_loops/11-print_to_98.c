@@ -1,26 +1,32 @@
-#include "main.h"
 #include <stdio.h>
+#include"main.h"
 
 /**
- * main - print sum of multiples of 3 or 5 below 1024
- * Return: 0
- */
+ * print_to_98 - prints numbers to 98
+ * @n: n is an integer
+ *
+ * Description: prints all natural numbers from n to 98
+ *
+ * Return: void
+*/
 
-int main(void)
+void print_to_98(int n)
 {
-	int n;
-	int sum;
-
-	sum = 0;
-
-	for (n = 0; n < 1024; n++)
+	if (n < 98)
 	{
-		if ((n % 3 == 0) || (n % 5 == 0))
+		while (n < 98)
 		{
-			sum += n;
+			printf("%d, ", n);
+			n++;
 		}
 	}
-	printf("%d\n", sum);
-
-	return (0);
+	else if (n > 98)
+	{
+		while (n > 98)
+		{
+			printf("%d, ", n);
+			n--;
+		}
+	}
+	printf("98\n");
 }
