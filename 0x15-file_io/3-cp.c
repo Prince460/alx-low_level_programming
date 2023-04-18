@@ -3,11 +3,11 @@
 #include <stdlib.h>
 
 char *create_buffer(char *file);
-void close_file(int pg);
+void close_pg(int pg);
 
 /**
- * create_buffer - Allocates 1024 bytes for buffer
- * @file: Name of the file buffer is storing char for
+ * create_buffer - To allocates 1024 bytes for buffer
+ * @pg: Name of the file buffer is storing char for
  * Return: A pointer to the new allocated buffer
  */
 char *create_buffer(char *file)
@@ -25,10 +25,10 @@ char *create_buffer(char *file)
 }
 
 /**
- * close_file - close file descriptor
- * @pg: file descriptor to be closed.
+ * close_pg - The closure for file descriptor
+ * @pg: file descriptor that will be closed.
  */
-void close_file(int pg)
+void close_pg(int pg)
 {
 	int g;
 
@@ -48,33 +48,41 @@ void close_file(int pg)
  */
 int main(int argc, char *argv[])
 {
-	int from, to, r, w;
+	int file_from, file_to, lo, xc;
 	char *buffer;
 
 	if (argc != 3)
 	{
-	dprintf(STDERR_FILENO, "usage: cp file_from file_to\n");
-	exit(97);
+		dprintf(STDERR_FILENO, "Usage: cp file_from file_to\n");
+		exit(97);
 	}
 	buffer = create_buffer(argv[2]);
-	from = open(argv[1], O_RDONLY);
-	r = read(from, buffer, 1024);
-	to = open(argv[2], O_CREAT | O_WRONLY | O_TRUNC, 0664);
+	file_from = open(argv[1], O_RDONLY);
+	lo = read(file_from, buffer, 1024);
+	file_to = open(argv[2], O_CREAT | O_WRONLY | O_TRUNC, 0664);
 	do {
+		if (file_from == -1 || lo == -1)
+		{
+			dprintf(STDERR_FILENO,
+					"Error: Can't read from file %s\n", argv[1]);
+			free(buffer);
+			exit(98);
+		}
 
-	if (from == -1 || r == -1)
-	{
-	dprintf(STDERR_FILENO, "Error: can't write to %s\n", argv[2]);
+		xc = write(file_to, buffer, lo);
+		if (file_to == -1 || xc == -1)
+		{
+			dprintf(STDERR_FILENO,
+					"Error: Can't write to %s\n", argv[2]);
+			free(buffer);
+			exit(99);
+		}
+
+		lo = read(file_from, buffer, 1024);
+		file_to = open(argv[2], O_WRONLY | O_APPEND);
+	} while (lo > 0);
 	free(buffer);
-	exit(99);
-	}
-	r = read(from, buffer, 1024);
-	to = open(argv[2], O_WRONLY | O_APPEND);
-
-	} while (r > 0);
-	free(buffer);
-	close_file(from);
-	close_file(to);
-
+	close_pg(file_from);
+	close_pg(file_to);
 	return (0);
 }
