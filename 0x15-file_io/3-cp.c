@@ -48,7 +48,7 @@ void close_file(int pg)
  */
 int main(int argc, char *argv[])
 {
-	int from, to, v;
+	int from, to, r, w;
 	char *buffer;
 
 	if (argc != 3)
@@ -58,20 +58,20 @@ int main(int argc, char *argv[])
 	}
 	buffer = create_buffer(argv[2]);
 	from = open(argv[1], O_RDONLY);
-	v = read(from, buffer, 1024);
+	r = read(from, buffer, 1024);
 	to = open(argv[2], O_CREAT | O_WRONLY | O_TRUNC, 0664);
 	do {
 
-	if (from == -1 || v == -1)
+	if (from == -1 || r == -1)
 	{
 	dprintf(STDERR_FILENO, "Error: can't write to %s\n", argv[2]);
 	free(buffer);
 	exit(99);
 	}
-	v = read(from, buffer, 1024);
+	r = read(from, buffer, 1024);
 	to = open(argv[2], O_WRONLY | O_APPEND);
 
-	} while (v > 0);
+	} while (r > 0);
 	free(buffer);
 	close_file(from);
 	close_file(to);
