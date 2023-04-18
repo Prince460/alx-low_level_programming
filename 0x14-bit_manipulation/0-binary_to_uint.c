@@ -9,7 +9,9 @@ unsigned int binary_to_unit(const char *b)
 {
 	int v;
 
-	unsigned int x  = 0;
+	unsigned int x;
+	
+	x = 0;
 
 	if (!b)
 		return (0);
